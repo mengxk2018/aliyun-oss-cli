@@ -4,7 +4,7 @@
 ## 安装
 
 ```
-npm install aliyun-oss-cli --save-dev
+npm install @mengxk2008/aliyun-oss-cli --save-dev
 ```
 
 ## 配置
