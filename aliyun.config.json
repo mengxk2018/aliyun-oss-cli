@@ -1,0 +1,20 @@
+{
+  "region": "-",
+  "bucket": "-",
+  "accessKeyId": "-",
+  "accessKeySecret": "-",
+  "envConf": {
+    "dev": {
+      "source": "dist/",
+      "target": "home/dev/"
+    },
+    "sta": {
+      "source": "dist/",
+      "target": "home/sta/"
+    },
+    "prod": {
+      "source": "dist/",
+      "target": "home/prod/"
+    }
+  }
+}
