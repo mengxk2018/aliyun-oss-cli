@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 exports.__esModule = true;
+var oss_1 = require("./oss");
 var upload_1 = require("./upload");
 var minimist = require('minimist');
 var pkg = require('../package.json');
@@ -18,6 +19,7 @@ if (program.help) {
     console.log("--help               查看帮助");
     console.log("--version            查看版本");
     console.log("--config             配置文件路径 默认: ./aliyun.config.json");
+    console.log("--delete             上传前清空目标文件夹 默认：否");
     console.log("--env                发布环境 例如: dev sta prod");
     console.log("--source             本地静态文件路径 例如: dist/");
     console.log("--target             阿里云 OSS 文件路径 例如: static/home/");
@@ -60,5 +62,12 @@ params.forEach(function (k) {
         process.exit();
     }
 });
-// 上传 OSS
-upload_1.upload(ossConfig);
+var ossService = new oss_1.AliyunOssService(ossConfig);
+if (program["delete"]) {
+    ossService["delete"](ossConfig.target).then(function (res) {
+        ossService.upload();
+    });
+}
+else {
+    ossService.upload();
+}

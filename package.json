@@ -1,6 +1,6 @@
 {
   "name": "@mengxk2008/aliyun-oss-cli",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "aliyun oss cli for upload etc. in shell",
   "main": "src/index.ts",
   "bin": {

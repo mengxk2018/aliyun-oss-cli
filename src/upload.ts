@@ -1,4 +1,6 @@
-export const alioss = require('ali-oss')
+import * as OSS from "ali-oss"
+import { OssConfig } from "./oss"
+
 export const path = require('path')
 export const fs = require('fs')
 
@@ -8,24 +10,13 @@ let sucNumber = 0
 let retNumber = 0
 let sizeNumber = 0
 
-export interface OssConfig {
-  accessKeyId: string,
-  accessKeySecret: string,
-  region: string,
-  bucket: string,
-  source: string,
-  target: string,
-  envConf: any
-}
-
-export function upload(ossConfig: OssConfig) {
-  const client = new alioss(ossConfig)
+export function upload(client: OSS, ossConfig: OssConfig) {
   console.log(`[aliyun-oss-cli] START UPLOADING... oss://${ossConfig.bucket}/${ossConfig.target}`)
   const list = _list(path.posix.join(process.cwd(), ossConfig.source))
   allNumber = list.length
   if (list.length > 0) {
     list.forEach(item => {
-      _upload(item, ossConfig, client)
+      _upload(item, client, ossConfig)
     })
   } else {
     _result()
@@ -38,7 +29,7 @@ function _result() {
   }
 }
 
-function _upload(item: any, ossConfig: OssConfig, client: any, retry = true) {
+function _upload(item: any, client: OSS, ossConfig: OssConfig, retry = true) {
   client.put(`${ossConfig.target}${item.relative}`, item.file).then(() => {
     sucNumber++
     tmpNumber++
@@ -47,7 +38,7 @@ function _upload(item: any, ossConfig: OssConfig, client: any, retry = true) {
     _result()
   }).catch(() => {
     if (retry) {
-      _upload(item, ossConfig, client, false)
+      _upload(item, client, ossConfig, false)
     } else {
       retNumber++
       tmpNumber++

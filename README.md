@@ -54,6 +54,7 @@ aliyun-oss-cli [options]
 --help               查看帮助
 --version            查看版本
 --config             配置文件路径 默认: ./aliyun.config.json
+--delete             上传前清空目标文件夹 默认：否
 --env                发布环境 例如: dev sta prod
 --source             本地静态文件路径 例如: dist/
 --target             阿里云 OSS 文件路径 例如: static/home/

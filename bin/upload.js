@@ -1,7 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.upload = exports.fs = exports.path = exports.alioss = void 0;
-exports.alioss = require('ali-oss');
+exports.upload = exports.fs = exports.path = void 0;
 exports.path = require('path');
 exports.fs = require('fs');
 var allNumber = 0;
@@ -9,14 +8,13 @@ var tmpNumber = 0;
 var sucNumber = 0;
 var retNumber = 0;
 var sizeNumber = 0;
-function upload(ossConfig) {
-    var client = new exports.alioss(ossConfig);
+function upload(client, ossConfig) {
     console.log("[aliyun-oss-cli] START UPLOADING... oss://" + ossConfig.bucket + "/" + ossConfig.target);
     var list = _list(exports.path.posix.join(process.cwd(), ossConfig.source));
     allNumber = list.length;
     if (list.length > 0) {
         list.forEach(function (item) {
-            _upload(item, ossConfig, client);
+            _upload(item, client, ossConfig);
         });
     }
     else {
@@ -29,7 +27,7 @@ function _result() {
         console.log("[aliyun-oss-cli] RESULT:   " + _renderSize(sizeNumber) + " - [ SIZE ]   " + allNumber + " - [ ALL ]   " + sucNumber + " - [ SUCCESS ]   " + retNumber + " - [ RETRY ]");
     }
 }
-function _upload(item, ossConfig, client, retry) {
+function _upload(item, client, ossConfig, retry) {
     if (retry === void 0) { retry = true; }
     client.put("" + ossConfig.target + item.relative, item.file).then(function () {
         sucNumber++;
@@ -39,7 +37,7 @@ function _upload(item, ossConfig, client, retry) {
         _result();
     })["catch"](function () {
         if (retry) {
-            _upload(item, ossConfig, client, false);
+            _upload(item, client, ossConfig, false);
         }
         else {
             retNumber++;

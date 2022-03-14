@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { upload, OssConfig, path, fs } from './upload'
+import { AliyunOssService, OssConfig } from './oss'
+import { path, fs } from './upload'
 const minimist = require('minimist')
 const pkg = require('../package.json')
 
@@ -19,6 +20,7 @@ if (program.help) {
   console.log("--help               查看帮助")
   console.log("--version            查看版本")
   console.log("--config             配置文件路径 默认: ./aliyun.config.json")
+  console.log("--delete             上传前清空目标文件夹 默认：否")
   console.log("--env                发布环境 例如: dev sta prod")
   console.log("--source             本地静态文件路径 例如: dist/")
   console.log("--target             阿里云 OSS 文件路径 例如: static/home/")
@@ -60,5 +62,12 @@ params.forEach((k: string) => {
   }
 })
 
-// 上传 OSS
-upload(ossConfig)
+const ossService = new AliyunOssService(ossConfig);
+
+if (program.delete) {
+  ossService.delete(ossConfig.target).then(res => {
+    ossService.upload()
+  })
+} else {
+  ossService.upload()
+}
